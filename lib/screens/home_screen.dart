@@ -9,6 +9,10 @@ import 'chat.dart';
 import 'login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  final String username;
+
+  HomeScreen(this.username);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -23,20 +27,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     getUserInfo();
-
-    databaseMethods.getPrivateChatRooms(Constants.myName).then((value){
-      privateChatrooms = value;
-    });
     super.initState();
   }
 
-  getUserInfo() async {
-    Constants.myName = await HelperFunctions.getNameSharePreference();
-    print(Constants.myName);
-    databaseMethods.getPrivateChatRooms(Constants.myName).then((value){
-      privateChatrooms = value;
+  getUserInfo() {
+    print(widget.username);
+    Constants.myName = widget.username;
+    HelperFunctions.saveNameSharePreference(widget.username);
+    databaseMethods.getPrivateChatRooms(widget.username).then((value){
+      setState(() {
+        privateChatrooms = value;
+      });
     });
-    setState(() {});
   }
 
   Widget chatRoomList(){
@@ -51,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                   context, 
                   MaterialPageRoute
-                    (builder: (context) => ChatScreen(snapshot.data.docs[index].data()["chatroomID"], snapshot.data.docs[index].data()["chatroomID"].toString().replaceAll("_", "").replaceAll(Constants.myName, ""))
+                    (builder: (context) => ChatScreen(snapshot.data.docs[index].data()["chatroomID"], snapshot.data.docs[index].data()["chatroomID"].toString().replaceAll("_", "").replaceAll(widget.username, ""))
                   )
                 ),
                 child: Container(
@@ -80,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                snapshot.data.docs[index].data()["chatroomID"].toString().replaceAll("_", "").replaceAll(Constants.myName, ""),
+                                snapshot.data.docs[index].data()["chatroomID"].toString().replaceAll("_", "").replaceAll(widget.username, ""),
                                 style: TextStyle(
                                   color:  Colors.grey,
                                   fontSize: 25.0,
@@ -94,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               )
             );
-        }) : Container();
+        }) : Container(child: Center(child: Text("No messages")));
       },
     );
   }
@@ -132,10 +134,9 @@ class _HomeScreenState extends State<HomeScreen> {
         titleSpacing: -17,
         centerTitle: false,
         title: Text(
-          Constants.myName,
+          widget.username,
           style: TextStyle(
             fontSize: 28.0,
-            fontWeight: FontWeight.bold,
           ),
         ),
         elevation: 0.0,
@@ -145,8 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
             iconSize: 30.0,
             color: Colors.white,
             onPressed: () {
-              HelperFunctions.saveUserLoggedInSharePreference(false);
-              Constants.myName = " ";
+              HelperFunctions.saveUserLoggedInSharePreference(false); 
               authMethods.signOut();
               Navigator.push(
                 context, 

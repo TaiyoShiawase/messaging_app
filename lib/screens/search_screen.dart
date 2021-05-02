@@ -4,8 +4,6 @@ import 'package:flutter_chat_ui_starter/helper/constants.dart';
 import 'package:flutter_chat_ui_starter/screens/chat.dart';
 import 'package:flutter_chat_ui_starter/services/database.dart';
 
-// import 'chat_screen.dart';
-
 class SearchScreen  extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -118,14 +116,6 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           Column(
             children: <Widget>[
-              Text(
-                "1:59 pm",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
               SizedBox(height: 5.0),
               trial ? Container(
               width: 40.0,
@@ -191,7 +181,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: Expanded(
                         child: TextFormField(
                           validator: (val){
-                                return val.isEmpty ? "Please Provide A Name" : null;
+                                return val.isEmpty ? "Please Provide A Username" : null;
                           },
                           controller: searchController,
                           style: TextStyle(color: Colors.white),

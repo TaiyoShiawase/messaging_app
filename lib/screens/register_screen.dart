@@ -45,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         databaseMethods.uploadUserInfo(userInfoMap);
 
         HelperFunctions.saveUserLoggedInSharePreference(true);        
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(nameController.text)));
       });
     }
   }

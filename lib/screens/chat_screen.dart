@@ -3,7 +3,6 @@ import '../models/message_model.dart';
 import '../models/user_model.dart';
 
 class ChatScreen extends StatefulWidget {
-
   final User user;
 
   ChatScreen({this.user});
@@ -15,7 +14,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
 
   _buildMessage(Message message, bool isMe) {
-    final Container msg = Container(
+    Container(
           margin: isMe ? EdgeInsets.only(top: 8.0, bottom: 8.0, left: 80.0) : EdgeInsets.only(top: 8.0, bottom: 8.0),
           padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
           width: MediaQuery.of(context).size.width * 0.75,
@@ -52,22 +51,6 @@ class _ChatScreenState extends State<ChatScreen> {
             ]
           )
         );
-
-    if(isMe){
-      return msg;
-    }
-
-    return Row(
-      children: <Widget>[
-        msg,
-        IconButton(
-          icon: message.isLiked ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
-          iconSize: 30.0,
-          color: message.isLiked ? Colors.red : Colors.blueGrey,
-          onPressed: () {},
-        )
-      ]
-    );
   }
 
   _buildMessageComposer() {
@@ -77,18 +60,10 @@ class _ChatScreenState extends State<ChatScreen> {
       color: Colors.white,
       child: Row(
         children: <Widget>[
-          IconButton(
-            icon:  Icon(Icons.photo),
-            iconSize: 25.0,
-            color: Theme.of(context).primaryColor,
-            onPressed: () {},  
-          ),
           Expanded(
             child: TextField(
               textCapitalization: TextCapitalization.sentences,
-              onChanged: (value) {
-                //message = value
-              },
+              onChanged: (value) {},
               decoration: InputDecoration.collapsed(
                 hintText: 'Send a message...',
               ),  
@@ -117,14 +92,6 @@ class _ChatScreenState extends State<ChatScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.more_horiz),
-            iconSize: 30.0,
-            color: Colors.white,
-            onPressed: () {},
-          ),
-        ],
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),

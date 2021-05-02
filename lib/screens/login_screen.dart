@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_ui_starter/helper/constants.dart';
 import 'package:flutter_chat_ui_starter/helper/helperFunctions.dart';
 import 'package:flutter_chat_ui_starter/screens/home_screen.dart';
 import 'package:flutter_chat_ui_starter/screens/register_screen.dart';
@@ -30,22 +29,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   signIn(){
     if(formKey.currentState.validate()){
-        setState(() {
-          isLoading = true;
-        });
+      setState(() {
+        isLoading = true;
+      });
 
-        authMethods.signInWithEmailAndPassword(emailController.text, passwordController.text).then((val){
-          if(val != null){
-            HelperFunctions.saveUserLoggedInSharePreference(true);   
+      authMethods.signInWithEmailAndPassword(emailController.text, passwordController.text).then((val){
+        if(val != null){
+          HelperFunctions.saveUserLoggedInSharePreference(true);   
 
-            databaseMethods.getUserByEmail(emailController.text).then((val) {
-              snapshotUserInfo = val;
-              HelperFunctions.clearSharePreference();
-              HelperFunctions.saveNameSharePreference(snapshotUserInfo.docs[0].data()["name"]);
-              print(Constants.myName);
-            });     
-
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          databaseMethods.getUserByEmail(emailController.text).then((val) {
+            snapshotUserInfo = val;
+          
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(snapshotUserInfo.docs[0].data()["name"])));
+          });     
         }
       });
     }
